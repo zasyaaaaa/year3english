@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Year 3 KSSR English Exam Revision Portal & Teacher CMS</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts: Fredoka & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+            sans: ['Inter', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              blue: '#2563eb',
+              sky: '#0284c7',
+              purple: '#7c3aed',
+              yellow: '#f59e0b',
+              green: '#10b981',
+              pink: '#ec4899',
+              coral: '#f43f5e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f0fdf4;
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .heading-font {
+      font-family: 'Fredoka', sans-serif;
+    }
+    .card-bounce {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-bounce:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Logo & Title -->
+      <div class="flex items-center space-x-3">
+        <div class="w-11 h-11 bg-gradient-to-tr from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md transform rotate-3">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold heading-font text-slate-900 tracking-wide flex items-center gap-2">
+            Get Smart Plus 3 <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-semibold border border-amber-300">KSSR Revision</span>
+          </h1>
+          <p class="text-xs text-slate-500">Year 3 English Exam Practice & Interactive Teacher CMS</p>
+        </div>
+      </div>
+
+      <!-- Live Gamification Stats Bar -->
+      <div class="flex items-center space-x-2 sm:space-x-4 bg-slate-50 px-3 py-1.5 rounded-2xl border border-slate-200 shadow-inner text-sm font-semibold">
+        <div class="flex items-center space-x-1.5 text-amber-600" title="Total Stars Earned">
+          <i class="fa-solid fa-star text-amber-400 text-lg"></i>
+          <span id="stat-stars">0</span>
+        </div>
+        <div class="w-px h-5 bg-slate-300"></div>
+        <div class="flex items-center space-x-1.5 text-rose-600" title="Current Answer Streak">
+          <i class="fa-solid fa-fire text-rose-500 text-lg"></i>
+          <span id="stat-streak">0</span>
+        </div>
+        <div class="w-px h-5 bg-slate-300"></div>
+        <div class="flex items-center space-x-1.5 text-emerald-600" title="Questions Answered Correctly">
+          <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
+          <span id="stat-score">0</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons & Teacher Auth Toggle -->
+      <div class="flex items-center space-x-2">
+        <button id="btn-audio-toggle" onclick="toggleAudioMute()" class="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 rounded-xl transition" title="Toggle Sound Effects">
+          <i id="audio-icon" class="fa-solid fa-volume-high text-lg"></i>
+        </button>
+
+        <button onclick="openCertificateModal()" class="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium px-3.5 py-2 rounded-xl text-sm shadow-sm transition">
+          <i class="fa-solid fa-award text-amber-300"></i>
+          <span>Certificate</span>
+        </button>
+
+        <button id="btn-auth-toggle" onclick="handleAuthButtonClick()" class="flex items-center space-x-2 bg-slate-800 hover:bg-slate-900 text-white font-medium px-4 py-2 rounded-xl text-sm shadow transition">
+          <i id="auth-icon" class="fa-solid fa-lock text-amber-400"></i>
+          <span id="auth-label">Teacher Sign In</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+
+    <!-- Admin Banner Indicator -->
+    <div id="teacher-status-banner" class="hidden bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white px-4 py-3 rounded-2xl shadow-md flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <span class="bg-white/20 p-2 rounded-xl text-white">
+          <i class="fa-solid fa-user-gear text-xl"></i>
+        </span>
+        <div>
+          <h3 class="font-bold heading-font text-base">Teacher / Admin Editing Mode Active</h3>
+          <p class="text-xs text-amber-100">You can edit questions, add new custom questions for any module, delete old ones, or export dataset.</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="switchTab('manage')" class="bg-white text-slate-900 hover:bg-slate-100 font-semibold text-xs px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+          <i class="fa-solid fa-sliders text-amber-600"></i> Manage Question Bank
+        </button>
+        <button onclick="openQuestionModal()" class="bg-slate-900 text-white hover:bg-slate-800 font-semibold text-xs px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+          <i class="fa-solid fa-plus text-amber-400"></i> Add Question
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex items-center space-x-2 border-b border-slate-200 overflow-x-auto custom-scrollbar pb-1">
+      <button id="tab-btn-practice" onclick="switchTab('practice')" class="tab-btn font-semibold text-sm px-4 py-2.5 rounded-t-xl border-b-2 border-indigo-600 text-indigo-600 bg-indigo-50/50 transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-book-open"></i> Module Practice
+      </button>
+      <button id="tab-btn-notes" onclick="switchTab('notes')" class="tab-btn font-semibold text-sm px-4 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-note-sticky text-amber-500"></i> Module Notes & Rules
+      </button>
+      <button id="tab-btn-exam" onclick="switchTab('exam')" class="tab-btn font-semibold text-sm px-4 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-stopwatch"></i> Timed Mock Exam
+      </button>
+      <button id="tab-btn-manage" onclick="switchTab('manage')" class="tab-btn font-semibold text-sm px-4 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-600 hover:text-slate-900 transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-list-check"></i> Teacher Question CMS <span id="teacher-badge" class="ml-1 bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">Admin</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: MODULE PRACTICE AREA -->
+    <div id="view-practice" class="space-y-6">
+      
+      <!-- 10 Modules Selection Carousel / Grid -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-bold heading-font text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-cubes text-amber-500"></i> Select Get Smart Plus 3 Module
+          </h2>
+          <span class="text-xs font-semibold text-slate-500" id="module-counter-info">10 KSSR Modules Available</span>
+        </div>
+
+        <div id="module-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+          <!-- Dynamically populated module cards -->
+        </div>
+      </div>
+
+      <!-- Quick Module Note Toggle Banner in Practice Mode -->
+      <div id="quick-module-note-banner" class="bg-amber-50 border border-amber-200 rounded-2xl p-4 shadow-sm transition">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-sm">
+              <i class="fa-solid fa-book-open"></i>
+            </div>
+            <div>
+              <h3 id="quick-note-title" class="text-sm font-bold text-amber-950">Quick Notes: Module 1 Welcome!</h3>
+              <p class="text-xs text-amber-800">Review key grammar and vocabulary before answering questions!</p>
+            </div>
+          </div>
+          <button onclick="toggleQuickNoteDrawer()" class="bg-amber-200 hover:bg-amber-300 text-amber-900 font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5">
+            <i id="quick-note-icon" class="fa-solid fa-chevron-down"></i> <span id="quick-note-btn-label">Show Notes</span>
+          </button>
+        </div>
+
+        <div id="quick-note-drawer-content" class="hidden mt-4 pt-4 border-t border-amber-200/80 space-y-3">
+          <div id="quick-note-body-vocab" class="text-xs space-y-1"></div>
+          <div id="quick-note-body-grammar" class="text-xs space-y-1"></div>
+        </div>
+      </div>
+
+      <!-- Skill Filter Bar & Practice Stats -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center space-x-2 overflow-x-auto custom-scrollbar py-1">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Skill Filter:</span>
+          <button onclick="setSkillFilter('All')" class="skill-pill active-skill bg-indigo-600 text-white text-xs font-medium px-3 py-1.5 rounded-xl transition">All Skills</button>
+          <button onclick="setSkillFilter('Vocabulary')" class="skill-pill bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-3 py-1.5 rounded-xl transition">Vocabulary</button>
+          <button onclick="setSkillFilter('Grammar')" class="skill-pill bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-3 py-1.5 rounded-xl transition">Grammar</button>
+          <button onclick="setSkillFilter('Reading')" class="skill-pill bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-3 py-1.5 rounded-xl transition">Reading</button>
+          <button onclick="setSkillFilter('Listening')" class="skill-pill bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-3 py-1.5 rounded-xl transition">Listening</button>
+          <button onclick="setSkillFilter('Speaking')" class="skill-pill bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-3 py-1.5 rounded-xl transition">Speaking</button>
+          <button onclick="setSkillFilter('Writing')" class="skill-pill bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-3 py-1.5 rounded-xl transition">Writing</button>
+        </div>
+
+        <div class="flex items-center space-x-3 text-xs text-slate-500 font-medium">
+          <span id="filtered-question-count">0 Questions found</span>
+          <button onclick="randomizeQuestions()" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-shuffle"></i> Shuffle
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Question Card Viewport -->
+      <div id="question-card-container" class="bg-white rounded-3xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-6 relative overflow-hidden">
+        
+        <div id="question-empty-state" class="hidden text-center py-12 space-y-3">
+          <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-2xl">
+            <i class="fa-solid fa-folder-open"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-700">No questions available for this filter</h3>
+          <p class="text-xs text-slate-500 max-w-sm mx-auto">Try switching skills, or click 'Add Question' in Teacher CMS mode to create custom KSSR questions!</p>
+          <div id="empty-state-add-btn-wrapper"></div>
+        </div>
+
+        <div id="question-content-wrapper" class="space-y-6">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-500 border-b border-slate-100 pb-4">
+            <div class="flex items-center space-x-2">
+              <span id="active-module-badge" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Module 1</span>
+              <span id="active-skill-badge" class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Grammar</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span>Question <span id="q-index-current" class="text-slate-900 font-bold">1</span> of <span id="q-index-total">1</span></span>
+              <button id="btn-edit-active-q" onclick="editActiveQuestion()" class="hidden bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold px-2.5 py-1 rounded-lg transition text-xs flex items-center gap-1">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-start justify-between gap-4">
+              <h3 id="question-text" class="text-lg sm:text-xl font-semibold text-slate-900 leading-snug">
+                Loading question...
+              </h3>
+              <button onclick="speakCurrentQuestion()" class="flex-shrink-0 w-10 h-10 rounded-2xl bg-amber-100 hover:bg-amber-200 text-amber-700 flex items-center justify-center text-lg transition shadow-sm" title="Listen to question prompt">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
+
+            <div id="audio-prompt-box" class="hidden bg-sky-50 border border-sky-200 rounded-2xl p-4 flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-headphones"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-sky-900">Audio Listening Prompt</p>
+                  <p class="text-xs text-sky-700">Click the button to listen carefully to the sentence.</p>
+                </div>
+              </div>
+              <button onclick="playAudioPrompt()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                <i class="fa-solid fa-play"></i> Play Sound
+              </button>
+            </div>
+
+            <div id="speaking-prompt-box" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-microphone"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-emerald-900">Speaking Practice Challenge</p>
+                    <p class="text-xs text-emerald-700">Read the phrase clearly into your microphone!</p>
+                  </div>
+                </div>
+                <button id="btn-mic-record" onclick="toggleSpeechRecognition()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                  <i class="fa-solid fa-microphone"></i> Speak Now
+                </button>
+              </div>
+              <div id="speech-recognized-output" class="text-xs font-mono bg-white p-2.5 rounded-xl border border-emerald-200 text-emerald-800 min-h-[36px] flex items-center">
+                Click 'Speak Now' and speak into your microphone...
+              </div>
+            </div>
+          </div>
+
+          <div id="options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <!-- Options rendered dynamically -->
+          </div>
+
+          <div id="writing-input-box" class="hidden space-y-3">
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Type Your Answer Below:</label>
+            <textarea id="writing-answer-text" rows="3" placeholder="Write your full sentence answer here..." class="w-full p-3.5 border border-slate-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"></textarea>
+            <button onclick="submitWritingAnswer()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-sm transition">
+              Submit Writing Answer
+            </button>
+          </div>
+
+          <div id="explanation-box" class="hidden p-4 rounded-2xl border text-sm space-y-1 transition">
+            <p id="explanation-title" class="font-bold flex items-center gap-2"></p>
+            <p id="explanation-text" class="text-xs leading-relaxed"></p>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+            <button id="btn-prev-q" onclick="navigateQuestion(-1)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-left"></i> Previous
+            </button>
+            
+            <div class="flex items-center space-x-2">
+              <button id="btn-hint" onclick="showQuestionHint()" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                <i class="fa-regular fa-lightbulb text-amber-500"></i> Hint
+              </button>
+              <button id="btn-next-q" onclick="navigateQuestion(1)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
+                Next <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 1.5: MODULE NOTES & REVISION GUIDE AREA -->
+    <div id="view-notes" class="hidden space-y-6">
+      
+      <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white p-6 rounded-3xl shadow-md flex flex-wrap items-center justify-between gap-4">
+        <div class="space-y-1">
+          <span class="bg-white/20 text-white text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">KSSR Get Smart Plus 3</span>
+          <h2 class="text-2xl font-bold heading-font flex items-center gap-2">
+            <i class="fa-solid fa-book-bookmark text-amber-200"></i> Module Revision Notes & Grammar Rules
+          </h2>
+          <p class="text-xs text-amber-100">Select any module below to review essential vocabulary, grammar rules, and exam tips before practicing!</p>
+        </div>
+      </div>
+
+      <div id="notes-module-grid" class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        <!-- Dynamically populated module pills -->
+      </div>
+
+      <div id="notes-content-card" class="bg-white rounded-3xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-6 relative">
+        <!-- Notes rendered dynamically based on selected module -->
+      </div>
+    </div>
+
+    <!-- TAB 2: TIMED MOCK EXAM MODE -->
+    <div id="view-exam" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-lg relative overflow-hidden">
+        <div class="max-w-2xl space-y-4">
+          <span class="bg-amber-400 text-slate-900 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Exam Simulation</span>
+          <h2 class="text-2xl sm:text-3xl font-bold heading-font">Year 3 English KSSR Final Assessment</h2>
+          <p class="text-slate-300 text-sm">20 Randomized KSSR questions covering all 10 Get Smart Plus 3 modules. Timer enabled!</p>
+          
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <div class="flex items-center space-x-2 text-xs bg-white/10 px-3 py-2 rounded-xl">
+              <i class="fa-solid fa-clock text-amber-400"></i>
+              <span>Time Limit: 15 Mins</span>
+            </div>
+            <div class="flex items-center space-x-2 text-xs bg-white/10 px-3 py-2 rounded-xl">
+              <i class="fa-solid fa-list-check text-emerald-400"></i>
+              <span>20 Questions</span>
+            </div>
+          </div>
+
+          <button onclick="startMockExam()" class="mt-4 bg-amber-400 hover:bg-amber-500 text-slate-955 font-bold px-6 py-3 rounded-2xl shadow-md transition transform active:scale-95 flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-play"></i> Start Timed Exam Now
+          </button>
+        </div>
+      </div>
+
+      <div id="exam-active-panel" class="hidden bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-bold text-slate-400">Exam Progress:</span>
+            <span id="exam-progress-text" class="text-sm font-extrabold text-indigo-600">Question 1 / 20</span>
+          </div>
+          <div class="flex items-center space-x-2 bg-rose-50 border border-rose-200 text-rose-700 px-3 py-1.5 rounded-xl font-mono text-sm font-bold">
+            <i class="fa-solid fa-stopwatch"></i>
+            <span id="exam-timer-display">15:00</span>
+          </div>
+        </div>
+
+        <div id="exam-question-body" class="space-y-4">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div class="flex justify-end pt-4 border-t border-slate-100">
+          <button onclick="submitExamEarly()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition">
+            Submit Exam Early
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: TEACHER QUESTION CMS MANAGEMENT -->
+    <div id="view-manage" class="hidden space-y-6">
+      
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold heading-font text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-amber-500"></i> Teacher Question Bank CMS
+          </h2>
+          <p class="text-xs text-slate-500">Create, edit, delete, or filter questions across all 10 KSSR modules.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="openQuestionModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-xl text-xs shadow-sm transition flex items-center gap-1.5">
+            <i class="fa-solid fa-plus"></i> Add New Question
+          </button>
+          <button onclick="resetQuestionsToDefault()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-2 rounded-xl text-xs transition flex items-center gap-1.5" title="Reset dataset to default KSSR syllabus questions">
+            <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+          </button>
+          <button onclick="exportQuestionsJSON()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-2 rounded-xl text-xs transition flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i> Export JSON
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+          <input type="text" id="cms-search-input" oninput="renderCMSTable()" placeholder="Search question text or keywords..." class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <select id="cms-module-filter" onchange="renderCMSTable()" class="py-2 px-3 border border-slate-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+          <option value="All">All 10 KSSR Modules</option>
+          <option value="Module 1">Module 1: Welcome!</option>
+          <option value="Module 2">Module 2: Every Day</option>
+          <option value="Module 3">Module 3: Right Now</option>
+          <option value="Module 4">Module 4: Year In, Year Out</option>
+          <option value="Module 5">Module 5: My New House</option>
+          <option value="Module 6">Module 6: Food, Please!</option>
+          <option value="Module 7">Module 7: Out and About</option>
+          <option value="Module 8">Module 8: Where Were You Yesterday?</option>
+          <option value="Module 9">Module 9: On Holiday</option>
+          <option value="Module 10">Module 10: The World Around Us</option>
+        </select>
+
+        <select id="cms-skill-filter" onchange="renderCMSTable()" class="py-2 px-3 border border-slate-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500">
+          <option value="All">All Skill Types</option>
+          <option value="Vocabulary">Vocabulary</option>
+          <option value="Grammar">Grammar</option>
+          <option value="Reading">Reading</option>
+          <option value="Listening">Listening</option>
+          <option value="Speaking">Speaking</option>
+          <option value="Writing">Writing</option>
+        </select>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider">
+                <th class="p-3.5">Module</th>
+                <th class="p-3.5">Skill</th>
+                <th class="p-3.5">Question Text</th>
+                <th class="p-3.5">Answer Key</th>
+                <th class="p-3.5 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="cms-table-body" class="divide-y divide-slate-100 text-xs text-slate-700">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL 1: TEACHER AUTH MODAL -->
+  <div id="modal-teacher-auth" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 space-y-5 border border-slate-100">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg font-bold">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <h3 class="text-lg font-bold heading-font text-slate-900">Teacher / Admin Sign In</h3>
+        </div>
+        <button onclick="closeAuthModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500 leading-relaxed">
+        Sign in to unlock full Teacher editing capabilities (Add, Edit, Delete KSSR exam questions & persistent cloud saving).
+      </p>
+
+      <div id="auth-error-alert" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium"></div>
+
+      <form id="form-teacher-auth" onsubmit="handleTeacherLoginSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Teacher PIN / Password</label>
+          <input type="password" id="teacher-pin-input" required placeholder="Enter passcode" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500">
+          <p class="text-[11px] text-slate-400 mt-1">Passcode: <code class="bg-slate-100 px-1 rounded font-mono">bunnyzasya</code></p>
+        </div>
+
+        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-sm shadow transition">
+          Unlock Teacher CMS
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: QUESTION EDITOR MODAL -->
+  <div id="modal-question-editor" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 sm:p-8 space-y-5 max-h-[90vh] overflow-y-auto custom-scrollbar border border-slate-100">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg font-bold">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </div>
+          <h3 id="editor-modal-title" class="text-lg font-bold heading-font text-slate-900">Add New Question</h3>
+        </div>
+        <button onclick="closeQuestionModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="form-question-editor" onsubmit="saveQuestionSubmit(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="edit-q-id">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Target KSSR Module</label>
+            <select id="editor-q-module" required class="w-full p-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500">
+              <option value="Module 1">Module 1: Welcome!</option>
+              <option value="Module 2">Module 2: Every Day</option>
+              <option value="Module 3">Module 3: Right Now</option>
+              <option value="Module 4">Module 4: Year In, Year Out</option>
+              <option value="Module 5">Module 5: My New House</option>
+              <option value="Module 6">Module 6: Food, Please!</option>
+              <option value="Module 7">Module 7: Out and About</option>
+              <option value="Module 8">Module 8: Where Were You Yesterday?</option>
+              <option value="Module 9">Module 9: On Holiday</option>
+              <option value="Module 10">Module 10: The World Around Us</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Skill Category</label>
+            <select id="editor-q-skill" required class="w-full p-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500">
+              <option value="Vocabulary">Vocabulary</option>
+              <option value="Grammar">Grammar</option>
+              <option value="Reading">Reading</option>
+              <option value="Listening">Listening</option>
+              <option value="Speaking">Speaking</option>
+              <option value="Writing">Writing</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Question Text / Prompt</label>
+          <textarea id="editor-q-text" required rows="2" placeholder="e.g. He _____ playing football in the garden." class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+
+        <div class="space-y-2 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+          <label class="block font-bold text-slate-700">Multiple Choice Options</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <span class="text-[10px] text-slate-500 font-bold">Option A</span>
+              <input type="text" id="editor-opt-a" required placeholder="Option A" class="w-full p-2 border border-slate-300 rounded-lg">
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 font-bold">Option B</span>
+              <input type="text" id="editor-opt-b" required placeholder="Option B" class="w-full p-2 border border-slate-300 rounded-lg">
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 font-bold">Option C</span>
+              <input type="text" id="editor-opt-c" placeholder="Option C (Optional)" class="w-full p-2 border border-slate-300 rounded-lg">
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 font-bold">Option D</span>
+              <input type="text" id="editor-opt-d" placeholder="Option D (Optional)" class="w-full p-2 border border-slate-300 rounded-lg">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Correct Answer Match</label>
+            <input type="text" id="editor-q-correct" required placeholder="Exact matching option text" class="w-full p-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Audio Listening Speech Prompt (Optional)</label>
+            <input type="text" id="editor-q-audio" placeholder="Sentence spoken aloud for Listening skill" class="w-full p-2.5 border border-slate-300 rounded-xl">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Teacher Hint / Explanation</label>
+          <input type="text" id="editor-q-explanation" placeholder="e.g. Use 'is' for singular pronouns (he/she/it)." class="w-full p-2.5 border border-slate-300 rounded-xl">
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeQuestionModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow transition">
+            Save Question
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: CERTIFICATE GENERATOR MODAL -->
+  <div id="modal-certificate" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 space-y-4 border border-slate-100">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold heading-font text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-award text-amber-500"></i> Revision Certificate
+        </h3>
+        <button onclick="closeCertificateModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-slate-700">Student Name:</label>
+        <input type="text" id="student-cert-name" value="Smart Student" oninput="drawCertificate()" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm">
+      </div>
+
+      <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50 flex justify-center p-2">
+        <canvas id="cert-canvas" width="600" height="400" class="max-w-full h-auto rounded-xl shadow-inner"></canvas>
+      </div>
+
+      <div class="flex justify-between items-center pt-2">
+        <span class="text-xs text-slate-500">Generated for KSSR English Year 3</span>
+        <button onclick="downloadCertificate()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5">
+          <i class="fa-solid fa-download"></i> Save / Print Certificate
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK Modules -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    window.appState = {
+      isTeacher: false,
+      teacherPasscode: 'bunnyzasya',
+      activeModule: 'Module 1',
+      activeSkill: 'All',
+      questions: [],
+      filteredQuestions: [],
+      currentQIndex: 0,
+      stars: 0,
+      streak: 0,
+      score: 0,
+      audioMuted: false,
+      user: null,
+      db: null,
+      auth: null,
+      appId: typeof __app_id !== 'undefined' ? __app_id : 'year3-kssr-english-app'
+    };
+
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    if (firebaseConfig) {
+      try {
+        const app = initializeApp(firebaseConfig);
+        window.appState.auth = getAuth(app);
+        window.appState.db = getFirestore(app);
+
+        if (initialAuthToken) {
+          signInWithCustomToken(window.appState.auth, initialAuthToken).catch(() => {
+            signInAnonymously(window.appState.auth);
+          });
+        } else {
+          signInAnonymously(window.appState.auth);
+        }
+
+        onAuthStateChanged(window.appState.auth, (user) => {
+          if (user) {
+            window.appState.user = user;
+            initFirestoreListener();
+          }
+        });
+      } catch (e) {
+        console.warn('Firebase init error, using local fallback:', e);
+        loadDefaultQuestions();
+      }
+    } else {
+      loadDefaultQuestions();
+    }
+
+    function initFirestoreListener() {
+      if (!window.appState.db) return;
+      
+      const qCol = collection(window.appState.db, 'artifacts', window.appState.appId, 'public', 'data', 'kssr_questions');
+
+      onSnapshot(qCol, (snapshot) => {
+        const loaded = [];
+        snapshot.forEach(docSnap => {
+          loaded.push({ id: docSnap.id, ...docSnap.data() });
+        });
+
+        if (loaded.length > 0) {
+          window.appState.questions = loaded;
+        } else {
+          seedFirestoreDefaults();
+        }
+        refreshAppView();
+      }, (error) => {
+        console.warn("Firestore snapshot error:", error);
+        if (window.appState.questions.length === 0) loadDefaultQuestions();
+      });
+    }
+
+    async function seedFirestoreDefaults() {
+      const defaults = getDefaultKSSRQuestions();
+      window.appState.questions = defaults;
+      refreshAppView();
+
+      if (window.appState.db && window.appState.user) {
+        for (const q of defaults) {
+          const docRef = doc(window.appState.db, 'artifacts', window.appState.appId, 'public', 'data', 'kssr_questions', q.id);
+          await setDoc(docRef, q).catch(e => console.warn(e));
+        }
+      }
+    }
+
+    window.saveQuestionToFirestore = async function(questionObj) {
+      if (!window.appState.db || !window.appState.user) {
+        const idx = window.appState.questions.findIndex(q => q.id === questionObj.id);
+        if (idx >= 0) window.appState.questions[idx] = questionObj;
+        else window.appState.questions.unshift(questionObj);
+        refreshAppView();
+        return;
+      }
+
+      try {
+        const docRef = doc(window.appState.db, 'artifacts', window.appState.appId, 'public', 'data', 'kssr_questions', questionObj.id);
+        await setDoc(docRef, questionObj);
+      } catch (err) {
+        console.error("Error saving question:", err);
+      }
+    };
+
+    window.deleteQuestionFromFirestore = async function(questionId) {
+      const idx = window.appState.questions.findIndex(q => q.id === questionId);
+      if (idx >= 0) window.appState.questions.splice(idx, 1);
+      refreshAppView();
+
+      if (window.appState.db && window.appState.user) {
+        try {
+          const docRef = doc(window.appState.db, 'artifacts', window.appState.appId, 'public', 'data', 'kssr_questions', questionId);
+          await deleteDoc(docRef);
+        } catch (err) {
+          console.error("Error deleting question:", err);
+        }
+      }
+    };
+
+    window.resetQuestionsToDefault = async function() {
+      if (!confirm("Are you sure you want to reset all questions to the default 10 KSSR Get Smart Plus 3 modules?")) return;
+      await seedFirestoreDefaults();
+      alert("Questions reset to KSSR Defaults successfully!");
+    };
+  </script>
+
+  <!-- Main JavaScript Logic & Complete Revision Notes -->
+  <script>
+    // Detailed notes section data for each of the 10 modules
+    const MODULE_NOTES = {
+      'Module 1': {
+        title: 'Module 1: Welcome!',
+        icon: 'fa-hand-wave',
+        themeColor: 'amber',
+        vocab: [
+          { word: 'have got / has got', detail: 'Used to talk about possession or physical appearance.' },
+          { word: 'curly / straight hair', detail: 'Describing hair types. e.g., "He has got curly hair."' },
+          { word: 'blonde / dark hair', detail: 'Hair colours. e.g., "She has got blonde hair."' },
+          { word: 'o\'clock / half past', detail: 'Telling time. "Three o\'clock" (3:00) vs "Half past three" (3:30).' },
+          { word: 'numbers 10 - 100', detail: 'ten, twenty, thirty, forty, fifty, sixty, seventy, eighty, ninety, one hundred.' }
+        ],
+        grammar: [
+          { rule: 'Have got / Has got', explanation: '<b>I / You / We / They</b> ➔ <b>have got</b><br><b>He / She / It</b> ➔ <b>has got</b><br><i>Example:</i> She <b>has got</b> brown eyes.' },
+          { rule: 'Questions with Have / Has', explanation: '<b>Have you got</b> twenty shells? Yes, I have. / No, I haven\'t.<br><b>Has he got</b> straight hair? Yes, he has. / No, he hasn\'t.' },
+          { rule: 'Telling Time', explanation: 'Long hand at 12 ➔ <b>o\'clock</b> (It\'s 4 o\'clock)<br>Long hand at 6 ➔ <b>half past</b> (It\'s half past 4)' }
+        ],
+        tips: 'Always check if the subject is singular (He/She) or plural (They/We) before choosing "has got" or "have got"!'
+      },
+      'Module 2': {
+        title: 'Module 2: Every Day',
+        icon: 'fa-calendar-day',
+        themeColor: 'blue',
+        vocab: [
+          { word: 'daily routines', detail: 'do my homework, wash the dishes, brush my teeth, take a shower, get dressed.' },
+          { word: 'school subjects', detail: 'English, Maths, Science, Art, Music, Physical Education (PE).' },
+          { word: 'adverbs of frequency', detail: 'always (100%), usually (80%), sometimes (50%), never (0%).' }
+        ],
+        grammar: [
+          { rule: 'Present Simple (Habits & Routines)', explanation: '<b>I / You / We / They</b> ➔ base verb (e.g., <i>brush</i>).<br><b>He / She / It</b> ➔ verb + <b>-s / -es</b> (e.g., <i>brushes</i>).<br><i>Example:</i> He always <b>brushes</b> his teeth.' },
+          { rule: 'Adverbs Position', explanation: 'Place frequency adverbs BEFORE the main verb:<br>Subject + <b>always / usually / sometimes / never</b> + Verb.<br><i>Example:</i> I <b>always do</b> my homework.' }
+        ],
+        tips: 'When you see "always" or "usually" with He, She, or It, make sure to add -s or -es to the verb!'
+      },
+      'Module 3': {
+        title: 'Module 3: Right Now',
+        icon: 'fa-running',
+        themeColor: 'emerald',
+        vocab: [
+          { word: 'sports & activities', detail: 'playing badminton, playing basketball, doing gymnastics, skateboarding, swimming, cycling.' },
+          { word: 'action verbs', detail: 'running, jumping, hitting, catching, throwing, exercising.' }
+        ],
+        grammar: [
+          { rule: 'Present Continuous (Actions happening NOW)', explanation: 'Subject + <b>am / is / are</b> + <b>Verb-ing</b>.<br>I am playing... / He is playing... / They are playing...' },
+          { rule: 'Present Continuous Questions', explanation: '<b>Is she</b> playing badminton? Yes, she is. / No, she isn\'t.<br><b>Are they</b> swimming? Yes, they are. / No, they aren\'t.' }
+        ],
+        tips: 'Look out for signal words like "Right now", "Look!", or "Listen!" which signal Present Continuous (is/am/are + verb-ing).'
+      },
+      'Module 4': {
+        title: 'Module 4: Year In, Year Out',
+        icon: 'fa-cloud-sun-rain',
+        themeColor: 'purple',
+        vocab: [
+          { word: 'seasons', detail: 'spring, summer, autumn, winter.' },
+          { word: 'weather words', detail: 'sunny, rainy, windy, snowy, cloudy, hot, cold.' },
+          { word: 'months of the year', detail: 'January, February, March, April, May, June, July, August, September, October, November, December.' }
+        ],
+        grammar: [
+          { rule: 'Prepositions of Time (In vs On)', explanation: 'Use <b>in</b> + Months / Seasons: <i>in August, in summer</i>.<br>Use <b>on</b> + Days / Dates: <i>on Monday, on 4th July</i>.' },
+          { rule: 'Expressing Likes with Verb-ing', explanation: 'Subject + <b>like / likes</b> + <b>Verb-ing</b>.<br><i>Example:</i> I like <b>swimming</b> in summer. He likes <b>skiing</b> in winter.' }
+        ],
+        tips: 'Months ALWAYS begin with a capital letter (e.g. October) and take the preposition "in".'
+      },
+      'Module 5': {
+        title: 'Module 5: My New House',
+        icon: 'fa-house-chimney',
+        themeColor: 'orange',
+        vocab: [
+          { word: 'rooms in a house', detail: 'living room, bedroom, kitchen, bathroom, dining room, hall, garden.' },
+          { word: 'furniture & items', detail: 'fridge, bookcase, armchair, sofa, cushion, painting, mirror, wardrobe.' }
+        ],
+        grammar: [
+          { rule: 'There is / There are', explanation: '<b>There is</b> + singular noun (<i>There is a fridge in the kitchen.</i>)<br><b>There are</b> + plural nouns (<i>There are three cushions on the sofa.</i>)' },
+          { rule: 'Possessive Pronouns', explanation: 'mine, yours, his, hers, ours, theirs.<br><i>Whose coat is this? It\'s <b>mine</b>.</i>' }
+        ],
+        tips: 'Count the items first! If there is 1 item ➔ "There is". If there are 2 or more ➔ "There are".'
+      },
+      'Module 6': {
+        title: 'Module 6: Food, Please!',
+        icon: 'fa-utensils',
+        themeColor: 'yellow',
+        vocab: [
+          { word: 'ingredients & food', detail: 'milk, cheese, eggs, flour, butter, omelette, tomatoes, peppers, onions, pancakes.' },
+          { word: 'food quantities', detail: 'a cup of, a glass of, a box of, some, any.' }
+        ],
+        grammar: [
+          { rule: 'Quantifiers: Some vs Any', explanation: '<b>Some</b> ➔ positive statements (<i>There is some milk.</i>)<br><b>Any</b> ➔ questions & negatives (<i>Are there any eggs? There aren\'t any tomatoes.</i>)' },
+          { rule: 'Would like for requests', explanation: 'I <b>would like</b> some cheese, please. / Would you like a pancake?' }
+        ],
+        tips: 'In questions (?) and negative sentences (n\'t/not), always use "any" instead of "some"!'
+      },
+      'Module 7': {
+        title: 'Module 7: Out and About',
+        icon: 'fa-map-location-dot',
+        themeColor: 'sky',
+        vocab: [
+          { word: 'safety & rules', detail: 'zebra crossing, seat belt, helmet, pavement, traffic lights, stop, turn left/right.' },
+          { word: 'modes of transport', detail: 'train, bus, taxi, bicycle, plane, gondola.' }
+        ],
+        grammar: [
+          { rule: 'Modals for Rules: Must / Mustn\'t', explanation: '<b>Must</b> = rule you must follow (<i>You must wear a helmet.</i>)<br><b>Mustn\'t</b> = forbidden action (<i>You mustn\'t run across the road.</i>)' }
+        ],
+        tips: 'After "must" or "mustn\'t", always use the base verb without -s, -ing, or -ed (e.g. You must <b>wear</b> a seatbelt).'
+      },
+      'Module 8': {
+        title: 'Module 8: Where Were You Yesterday?',
+        icon: 'fa-clock-rotate-left',
+        themeColor: 'teal',
+        vocab: [
+          { word: 'places in town', detail: 'shopping centre, amusement park, circus, cinema, restaurant, library, museum, hospital.' },
+          { word: 'feelings & adjectives', detail: 'noisy, quiet, scary, funny, delicious, boring, exciting.' }
+        ],
+        grammar: [
+          { rule: 'Past Simple of Verb "to be" (Was / Were)', explanation: '<b>I / He / She / It</b> ➔ <b>was / wasn\'t</b><br><b>You / We / They</b> ➔ <b>were / weren\'t</b><br><i>Example:</i> I <b>was</b> at the cinema yesterday. They <b>were</b> happy.' },
+          { rule: 'Past Time Markers', explanation: 'yesterday, yesterday morning, last night, last weekend.' }
+        ],
+        tips: 'If you see "yesterday" or "last", you are talking about the past! Use "was" (singular) or "were" (plural).'
+      },
+      'Module 9': {
+        title: 'Module 9: On Holiday',
+        icon: 'fa-umbrella-beach',
+        themeColor: 'pink',
+        vocab: [
+          { word: 'holiday actions', detail: 'pack my bag, make a sandcastle, catch a fish, collect shells, swim in the sea, take photos.' },
+          { word: 'travel items', detail: 'sun hat, towel, camera, suitcase, sunglasses.' }
+        ],
+        grammar: [
+          { rule: 'Past Simple (Regular & Irregular Verbs)', explanation: 'Regular (+ed): <i>pack ➔ packed, play ➔ played</i>.<br>Irregular: <i>go ➔ <b>went</b>, make ➔ <b>made</b>, catch ➔ <b>caught</b>, take ➔ <b>took</b>, swim ➔ <b>swam</b>, eat ➔ <b>ate</b>.</i>' }
+        ],
+        tips: 'Memorise key KSSR irregular past tense verbs: go➔went, make➔made, see➔saw, buy➔bought, eat➔ate!'
+      },
+      'Module 10': {
+        title: 'Module 10: The World Around Us',
+        icon: 'fa-earth-americas',
+        themeColor: 'indigo',
+        vocab: [
+          { word: 'animals & adjectives', detail: 'cheetah, blue whale, giraffe, elephant, heavy, fast, slow, tall, strong, deep, big.' }
+        ],
+        grammar: [
+          { rule: 'Comparatives (-er than)', explanation: 'Comparing 2 items: Adjective + <b>-er than</b>.<br><i>Example:</i> A cheetah is <b>faster than</b> a turtle.' },
+          { rule: 'Superlatives (the -est)', explanation: 'Comparing 3 or more items: <b>the</b> + Adjective + <b>-est</b>.<br><i>Example:</i> The blue whale is <b>the biggest</b> animal in the world.' }
+        ],
+        tips: 'Look for "than" in the sentence! If you see "than", it is comparative (-er). If you see "the", it is superlative (-est).'
+      }
+    };
+
+    const MODULE_METADATA = [
+      { id: 'Module 1', name: 'Welcome!', icon: 'fa-hand-wave' },
+      { id: 'Module 2', name: 'Every Day', icon: 'fa-calendar-day' },
+      { id: 'Module 3', name: 'Right Now', icon: 'fa-running' },
+      { id: 'Module 4', name: 'Year In, Year Out', icon: 'fa-cloud-sun-rain' },
+      { id: 'Module 5', name: 'My New House', icon: 'fa-house-chimney' },
+      { id: 'Module 6', name: 'Food, Please!', icon: 'fa-utensils' },
+      { id: 'Module 7', name: 'Out and About', icon: 'fa-map-location-dot' },
+      { id: 'Module 8', name: 'Where Were You Yesterday?', icon: 'fa-clock-rotate-left' },
+      { id: 'Module 9', name: 'On Holiday', icon: 'fa-umbrella-beach' },
+      { id: 'Module 10', name: 'The World Around Us', icon: 'fa-earth-americas' }
+    ];
+
+    function getDefaultKSSRQuestions() {
+      return [
+        // Module 1
+        { id: 'q_m1_1', module: 'Module 1', skill: 'Grammar', question: 'She _____ got long curly hair and big brown eyes.', options: ['has', 'have', 'is', 'are'], correct: 'has', explanation: 'Use "has got" for singular third-person pronouns (he / she / it).' },
+        { id: 'q_m1_2', module: 'Module 1', skill: 'Grammar', question: 'What time is it? It is _____ past three (3:30).', options: ['half', 'o\'clock', 'quarter', 'time'], correct: 'half', explanation: '3:30 is expressed as "half past three" in KSSR English.' },
+        { id: 'q_m1_3', module: 'Module 1', skill: 'Vocabulary', question: 'How many shells has Greg got? He has got _____ (90) shells.', options: ['ninety', 'nineteen', 'nineth', 'nine'], correct: 'ninety', explanation: '90 in words is written as "ninety".' },
+        { id: 'q_m1_4', module: 'Module 1', skill: 'Listening', question: 'Listen carefully: Have you got seventy stickers?', options: ['Yes, I have.', 'No, she hasn\'t.', 'Yes, he is.', 'No, they aren\'t.'], correct: 'Yes, I have.', audioPrompt: 'Have you got seventy stickers?', explanation: 'Questions starting with "Have you got..." answer with "Yes, I have." or "No, I haven\'t."' },
+
+        // Module 2
+        { id: 'q_m2_1', module: 'Module 2', skill: 'Grammar', question: 'He always _____ his teeth after breakfast.', options: ['brushes', 'brush', 'brushing', 'brushed'], correct: 'brushes', explanation: 'He/She/It takes verb + -es in Present Simple habits.' },
+        { id: 'q_m2_2', module: 'Module 2', skill: 'Vocabulary', question: 'I do my _____ at five o\'clock every afternoon.', options: ['homework', 'dishes', 'shower', 'bed'], correct: 'homework', explanation: 'We say "do my homework".' },
+        { id: 'q_m2_3', module: 'Module 2', skill: 'Reading', question: 'Read: "Lisa usually plays the piano in the evening." What does Lisa do in the evening?', options: ['Plays the piano', 'Washes the dishes', 'Does gymnastics', 'Rides a bike'], correct: 'Plays the piano', explanation: 'The sentence states Lisa usually plays the piano.' },
+
+        // Module 3
+        { id: 'q_m3_1', module: 'Module 3', skill: 'Grammar', question: 'Look! The children _____ basketball in the court right now.', options: ['are playing', 'is playing', 'play', 'played'], correct: 'are playing', explanation: 'Plural subject "The children" takes "are + verb-ing" for actions happening right now.' },
+        { id: 'q_m3_2', module: 'Module 3', skill: 'Vocabulary', question: 'She is doing _____ in the sports hall.', options: ['gymnastics', 'badminton', 'swimming', 'football'], correct: 'gymnastics', explanation: 'We say "doing gymnastics".' },
+
+        // Module 4
+        { id: 'q_m4_1', module: 'Module 4', skill: 'Grammar', question: 'My birthday is _____ August.', options: ['in', 'on', 'at', 'under'], correct: 'in', explanation: 'Use the preposition "in" for months of the year.' },
+        { id: 'q_m4_2', module: 'Module 4', skill: 'Vocabulary', question: 'In winter, it is cold and _____.', options: ['snowy', 'sunny', 'hot', 'warm'], correct: 'snowy', explanation: 'Winter weather is cold and snowy.' },
+
+        // Module 5
+        { id: 'q_m5_1', module: 'Module 5', skill: 'Grammar', question: '_____ two comfortable armchairs in the living room.', options: ['There are', 'There is', 'Is there', 'Are there'], correct: 'There are', explanation: 'Use "There are" for plural nouns (two armchairs).' },
+        { id: 'q_m5_2', module: 'Module 5', skill: 'Vocabulary', question: 'You keep fresh food and milk in the _____.', options: ['fridge', 'bookcase', 'wardrobe', 'sofa'], correct: 'fridge', explanation: 'Fresh food and drinks are kept cold in a fridge.' },
+
+        // Module 6
+        { id: 'q_m6_1', module: 'Module 6', skill: 'Grammar', question: 'Is there _____ cheese in the fridge?', options: ['any', 'some', 'a', 'an'], correct: 'any', explanation: 'Use "any" in questions and negative sentences.' },
+        { id: 'q_m6_2', module: 'Module 6', skill: 'Vocabulary', question: 'I would like an _____ with eggs and peppers, please.', options: ['omelette', 'pancake', 'biscuit', 'soup'], correct: 'omelette', explanation: 'An omelette is made with beaten eggs and vegetables.' },
+
+        // Module 7
+        { id: 'q_m7_1', module: 'Module 7', skill: 'Grammar', question: 'You _____ wear a seat belt when riding in a car.', options: ['must', 'mustn\'t', 'doesn\'t', 'don\'t'], correct: 'must', explanation: 'Wearing a seatbelt is a mandatory safety rule ("must").' },
+        { id: 'q_m7_2', module: 'Module 7', skill: 'Vocabulary', question: 'Look both ways before using the _____ crossing.', options: ['zebra', 'tiger', 'lion', 'horse'], correct: 'zebra', explanation: 'Pedestrians cross the road at a zebra crossing.' },
+
+        // Module 8
+        { id: 'q_m8_1', module: 'Module 8', skill: 'Grammar', question: 'Where _____ you yesterday afternoon?', options: ['were', 'was', 'are', 'is'], correct: 'were', explanation: 'Use "were" with "you" or plural subjects in the past tense.' },
+        { id: 'q_m8_2', module: 'Module 8', skill: 'Vocabulary', question: 'We watched a funny film at the _____ yesterday.', options: ['cinema', 'circus', 'hospital', 'zoo'], correct: 'cinema', explanation: 'Films and movies are watched at the cinema.' },
+
+        // Module 9
+        { id: 'q_m9_1', module: 'Module 9', skill: 'Grammar', question: 'Yesterday, Amin _____ a huge sandcastle on the beach.', options: ['made', 'make', 'makes', 'making'], correct: 'made', explanation: '"Made" is the past simple tense of "make".' },
+        { id: 'q_m9_2', module: 'Module 9', skill: 'Vocabulary', question: 'Don\'t forget to pack your sun hat and _____ for the beach!', options: ['towel', 'bookcase', 'homework', 'desk'], correct: 'towel', explanation: 'A towel is used at the beach.' },
+
+        // Module 10
+        { id: 'q_m10_1', module: 'Module 10', skill: 'Grammar', question: 'A cheetah is _____ than a horse.', options: ['faster', 'fast', 'fastest', 'more fast'], correct: 'faster', explanation: 'Use comparative adjectives (-er than) when comparing two animals.' },
+        { id: 'q_m10_2', module: 'Module 10', skill: 'Grammar', question: 'The blue whale is the _____ animal in the world.', options: ['biggest', 'bigger', 'big', 'most big'], correct: 'biggest', explanation: 'Use superlative adjectives (the -est) for the highest degree among all.' }
+      ];
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playSoundEffect(type) {
+      if (window.appState.audioMuted) return;
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1);
+          osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.linearRampToValueAtTime(130, now + 0.2);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'click') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(400, now);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        }
+      } catch (e) {
+        console.warn('Audio effect error:', e);
+      }
+    }
+
+    function toggleAudioMute() {
+      window.appState.audioMuted = !window.appState.audioMuted;
+      const icon = document.getElementById('audio-icon');
+      if (window.appState.audioMuted) {
+        icon.className = 'fa-solid fa-volume-xmark text-lg text-slate-400';
+      } else {
+        icon.className = 'fa-solid fa-volume-high text-lg text-slate-700';
+        playSoundEffect('click');
+      }
+    }
+
+    window.onload = function() {
+      if (window.appState.questions.length === 0) {
+        loadDefaultQuestions();
+      }
+      renderModuleRibbon();
+      refreshAppView();
+    };
+
+    function loadDefaultQuestions() {
+      window.appState.questions = getDefaultKSSRQuestions();
+      refreshAppView();
+    }
+
+    function switchTab(tabId) {
+      playSoundEffect('click');
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-indigo-600', 'text-indigo-600', 'bg-indigo-50/50');
+        btn.classList.add('border-transparent', 'text-slate-600');
+      });
+
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-slate-600');
+        activeBtn.classList.add('border-indigo-600', 'text-indigo-600', 'bg-indigo-50/50');
+      }
+
+      document.getElementById('view-practice').classList.add('hidden');
+      document.getElementById('view-notes').classList.add('hidden');
+      document.getElementById('view-exam').classList.add('hidden');
+      document.getElementById('view-manage').classList.add('hidden');
+
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+      if (tabId === 'notes') {
+        renderNotesModuleGrid();
+        renderNotesView(window.appState.activeModule);
+      } else if (tabId === 'manage') {
+        renderCMSTable();
+      }
+    }
+
+    function renderModuleRibbon() {
+      const container = document.getElementById('module-grid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      MODULE_METADATA.forEach(mod => {
+        const isSelected = window.appState.activeModule === mod.id;
+        const card = document.createElement('div');
+        card.className = `cursor-pointer rounded-2xl p-3 border card-bounce flex flex-col justify-between transition ${
+          isSelected 
+            ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white border-indigo-600 shadow-md ring-2 ring-indigo-400/50' 
+            : 'bg-white text-slate-800 border-slate-200 hover:border-indigo-300'
+        }`;
+        card.onclick = () => selectModule(mod.id);
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}">
+              ${mod.id}
+            </span>
+            <i class="fa-solid ${mod.icon} ${isSelected ? 'text-amber-300' : 'text-indigo-500'} text-base"></i>
+          </div>
+          <h4 class="font-bold text-xs heading-font leading-tight line-clamp-1">${mod.name}</h4>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function selectModule(modId) {
+      playSoundEffect('click');
+      window.appState.activeModule = modId;
+      window.appState.currentQIndex = 0;
+      renderModuleRibbon();
+      refreshAppView();
+    }
+
+    function toggleQuickNoteDrawer() {
+      const drawer = document.getElementById('quick-note-drawer-content');
+      const icon = document.getElementById('quick-note-icon');
+      const btnLabel = document.getElementById('quick-note-btn-label');
+
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        icon.className = 'fa-solid fa-chevron-up';
+        btnLabel.innerText = 'Hide Notes';
+      } else {
+        drawer.classList.add('hidden');
+        icon.className = 'fa-solid fa-chevron-down';
+        btnLabel.innerText = 'Show Notes';
+      }
+    }
+
+    function updateQuickNoteBanner() {
+      const modKey = window.appState.activeModule;
+      const note = MODULE_NOTES[modKey] || MODULE_NOTES['Module 1'];
+
+      document.getElementById('quick-note-title').innerText = `Quick Notes: ${note.title}`;
+      
+      const vocabHtml = `
+        <strong class="text-amber-950 font-bold block mb-1">Key Vocab:</strong>
+        <div class="flex flex-wrap gap-1.5">
+          ${note.vocab.slice(0, 4).map(v => `<span class="bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-lg font-medium">${v.word}</span>`).join('')}
+        </div>
+      `;
+      
+      const grammarHtml = `
+        <strong class="text-amber-950 font-bold block mt-2 mb-1">Key Rule:</strong>
+        <p class="text-amber-900 leading-relaxed bg-amber-100/60 p-2 rounded-xl border border-amber-200/60">${note.grammar[0].explanation}</p>
+      `;
+
+      document.getElementById('quick-note-body-vocab').innerHTML = vocabHtml;
+      document.getElementById('quick-note-body-grammar').innerHTML = grammarHtml;
+    }
+
+    function setSkillFilter(skillName) {
+      playSoundEffect('click');
+      window.appState.activeSkill = skillName;
+      window.appState.currentQIndex = 0;
+
+      document.querySelectorAll('.skill-pill').forEach(pill => {
+        if (pill.innerText.trim() === skillName || (skillName === 'All' && pill.innerText.includes('All'))) {
+          pill.className = 'skill-pill bg-indigo-600 text-white text-xs font-medium px-3 py-1.5 rounded-xl transition';
+        } else {
+          pill.className = 'skill-pill bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-3 py-1.5 rounded-xl transition';
+        }
+      });
+
+      refreshAppView();
+    }
+
+    function refreshAppView() {
+      let list = window.appState.questions.filter(q => q.module === window.appState.activeModule);
+      if (window.appState.activeSkill !== 'All') {
+        list = list.filter(q => q.skill === window.appState.activeSkill);
+      }
+
+      window.appState.filteredQuestions = list;
+
+      const countElem = document.getElementById('filtered-question-count');
+      if (countElem) {
+        countElem.innerText = `${list.length} Questions found`;
+      }
+
+      if (window.appState.currentQIndex >= list.length) {
+        window.appState.currentQIndex = Math.max(0, list.length - 1);
+      }
+
+      updateQuickNoteBanner();
+      renderActiveQuestion();
+      updateGamificationStats();
+    }
+
+    function renderActiveQuestion() {
+      const qList = window.appState.filteredQuestions;
+      const emptyState = document.getElementById('question-empty-state');
+      const contentWrapper = document.getElementById('question-content-wrapper');
+
+      if (!emptyState || !contentWrapper) return;
+
+      if (!qList || qList.length === 0) {
+        emptyState.classList.remove('hidden');
+        contentWrapper.classList.add('hidden');
+        const addBtnWrapper = document.getElementById('empty-state-add-btn-wrapper');
+        if (addBtnWrapper) {
+          addBtnWrapper.innerHTML = window.appState.isTeacher 
+            ? `<button onclick="openQuestionModal()" class="bg-indigo-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow mt-2">➕ Add Question Now</button>` 
+            : '';
+        }
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      contentWrapper.classList.remove('hidden');
+
+      const q = qList[window.appState.currentQIndex];
+
+      const badgeMod = document.getElementById('active-module-badge');
+      if (badgeMod) badgeMod.innerText = q.module;
+
+      const badgeSkill = document.getElementById('active-skill-badge');
+      if (badgeSkill) badgeSkill.innerText = q.skill;
+
+      const qIdxCurrent = document.getElementById('q-index-current');
+      if (qIdxCurrent) qIdxCurrent.innerText = window.appState.currentQIndex + 1;
+
+      const qIdxTotal = document.getElementById('q-index-total');
+      if (qIdxTotal) qIdxTotal.innerText = qList.length;
+
+      const qText = document.getElementById('question-text');
+      if (qText) qText.innerText = q.question;
+
+      const expBox = document.getElementById('explanation-box');
+      if (expBox) expBox.classList.add('hidden');
+
+      const audioBox = document.getElementById('audio-prompt-box');
+      if (audioBox) {
+        if (q.skill === 'Listening' || q.audioPrompt) {
+          audioBox.classList.remove('hidden');
+        } else {
+          audioBox.classList.add('hidden');
+        }
+      }
+
+      const speakBox = document.getElementById('speaking-prompt-box');
+      if (speakBox) {
+        if (q.skill === 'Speaking') {
+          speakBox.classList.remove('hidden');
+        } else {
+          speakBox.classList.add('hidden');
+        }
+      }
+
+      const writingBox = document.getElementById('writing-input-box');
+      const optionsGrid = document.getElementById('options-grid');
+
+      if (writingBox && optionsGrid) {
+        if (q.skill === 'Writing' && (!q.options || q.options.length === 0)) {
+          writingBox.classList.remove('hidden');
+          optionsGrid.classList.add('hidden');
+        } else {
+          writingBox.classList.add('hidden');
+          optionsGrid.classList.remove('hidden');
+
+          optionsGrid.innerHTML = '';
+          (q.options || []).forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'w-full text-left p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 transition font-medium text-xs sm:text-sm text-slate-800 flex items-center justify-between group';
+            btn.onclick = () => handleAnswerSelect(opt, q);
+            btn.innerHTML = `
+              <span>${opt}</span>
+              <i class="fa-regular fa-circle text-slate-300 group-hover:text-indigo-500"></i>
+            `;
+            optionsGrid.appendChild(btn);
+          });
+        }
+      }
+
+      const btnEdit = document.getElementById('btn-edit-active-q');
+      if (btnEdit) {
+        if (window.appState.isTeacher) {
+          btnEdit.classList.remove('hidden');
+        } else {
+          btnEdit.classList.add('hidden');
+        }
+      }
+    }
+
+    function handleAnswerSelect(selectedOpt, questionObj) {
+      const isCorrect = selectedOpt.trim().toLowerCase() === questionObj.correct.trim().toLowerCase();
+      const expBox = document.getElementById('explanation-box');
+      const expTitle = document.getElementById('explanation-title');
+      const expText = document.getElementById('explanation-text');
+
+      expBox.classList.remove('hidden');
+
+      if (isCorrect) {
+        playSoundEffect('correct');
+        window.appState.stars += 5;
+        window.appState.streak += 1;
+        window.appState.score += 1;
+
+        expBox.className = 'p-4 rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-sm space-y-1';
+        expTitle.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> Excellent! That\'s Correct! (+5 Stars)';
+        expText.innerText = questionObj.explanation || 'Great job practicing your KSSR English skill!';
+      } else {
+        playSoundEffect('wrong');
+        window.appState.streak = 0;
+
+        expBox.className = 'p-4 rounded-2xl border border-rose-200 bg-rose-50 text-rose-900 text-sm space-y-1';
+        expTitle.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> Not quite! Correct Answer: "${questionObj.correct}"`;
+        expText.innerText = questionObj.explanation || 'Keep trying! Review the prompt carefully.';
+      }
+
+      updateGamificationStats();
+    }
+
+    function submitWritingAnswer() {
+      const qList = window.appState.filteredQuestions;
+      if (!qList.length) return;
+      const q = qList[window.appState.currentQIndex];
+      const val = document.getElementById('writing-answer-text').value;
+      if (!val.trim()) return;
+
+      handleAnswerSelect(val, q);
+    }
+
+    function navigateQuestion(delta) {
+      playSoundEffect('click');
+      const qList = window.appState.filteredQuestions;
+      if (!qList.length) return;
+
+      window.appState.currentQIndex = (window.appState.currentQIndex + delta + qList.length) % qList.length;
+      renderActiveQuestion();
+    }
+
+    function randomizeQuestions() {
+      playSoundEffect('click');
+      window.appState.filteredQuestions.sort(() => Math.random() - 0.5);
+      window.appState.currentQIndex = 0;
+      renderActiveQuestion();
+    }
+
+    function showQuestionHint() {
+      const qList = window.appState.filteredQuestions;
+      if (!qList.length) return;
+      const q = qList[window.appState.currentQIndex];
+
+      const expBox = document.getElementById('explanation-box');
+      const expTitle = document.getElementById('explanation-title');
+      const expText = document.getElementById('explanation-text');
+
+      expBox.classList.remove('hidden');
+      expBox.className = 'p-4 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 text-sm space-y-1';
+      expTitle.innerHTML = '<i class="fa-regular fa-lightbulb text-amber-600"></i> Teacher Hint';
+      expText.innerText = q.explanation || `Look out for key words. The correct answer starts with "${q.correct.charAt(0)}".`;
+    }
+
+    function speakCurrentQuestion() {
+      const qList = window.appState.filteredQuestions;
+      if (!qList.length) return;
+      const q = qList[window.appState.currentQIndex];
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(q.question);
+        msg.rate = 0.9;
+        msg.lang = 'en-US';
+        window.speechSynthesis.speak(msg);
+      }
+    }
+
+    function playAudioPrompt() {
+      const qList = window.appState.filteredQuestions;
+      if (!qList.length) return;
+      const q = qList[window.appState.currentQIndex];
+      const promptText = q.audioPrompt || q.question;
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(promptText);
+        msg.rate = 0.85;
+        msg.lang = 'en-US';
+        window.speechSynthesis.speak(msg);
+      }
+    }
+
+    function toggleSpeechRecognition() {
+      const output = document.getElementById('speech-recognized-output');
+      const btn = document.getElementById('btn-mic-record');
+
+      if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+        output.innerText = "Speech recognition is not supported in this browser window. Excellent reading practice!";
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+
+      btn.classList.add('animate-pulse', 'bg-rose-600');
+      output.innerText = "Listening... Speak clearly now!";
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        output.innerText = `Recognized: "${transcript}"`;
+        btn.classList.remove('animate-pulse', 'bg-rose-600');
+        playSoundEffect('correct');
+      };
+
+      recognition.onerror = () => {
+        output.innerText = "Could not hear clearly. Try again!";
+        btn.classList.remove('animate-pulse', 'bg-rose-600');
+      };
+
+      recognition.start();
+    }
+
+    function updateGamificationStats() {
+      document.getElementById('stat-stars').innerText = window.appState.stars;
+      document.getElementById('stat-streak').innerText = window.appState.streak;
+      document.getElementById('stat-score').innerText = window.appState.score;
+    }
+
+    function renderNotesModuleGrid() {
+      const container = document.getElementById('notes-module-grid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      MODULE_METADATA.forEach(mod => {
+        const isSelected = window.appState.activeModule === mod.id;
+        const btn = document.createElement('button');
+        btn.onclick = () => {
+          playSoundEffect('click');
+          window.appState.activeModule = mod.id;
+          renderNotesModuleGrid();
+          renderNotesView(mod.id);
+        };
+        btn.className = `p-2.5 rounded-2xl font-bold text-xs flex items-center justify-between border transition ${
+          isSelected 
+            ? 'bg-slate-900 text-amber-400 border-slate-900 shadow-sm' 
+            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+        }`;
+        btn.innerHTML = `
+          <span>${mod.id}</span>
+          <i class="fa-solid ${mod.icon} text-sm"></i>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function renderNotesView(modKey) {
+      const card = document.getElementById('notes-content-card');
+      if (!card) return;
+
+      const data = MODULE_NOTES[modKey] || MODULE_NOTES['Module 1'];
+
+      card.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl font-bold">
+              <i class="fa-solid ${data.icon}"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold heading-font text-slate-900">${data.title}</h3>
+              <p class="text-xs text-slate-500">Essential KSSR Year 3 Revision Notes</p>
+            </div>
+          </div>
+
+          <button onclick="jumpToModulePractice('${modKey}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+            <i class="fa-solid fa-play"></i> Practice ${modKey} Questions
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="space-y-3">
+            <h4 class="text-sm font-bold text-indigo-900 uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-spell-check text-indigo-600"></i> Key Vocabulary
+            </h4>
+            <div class="space-y-2">
+              ${data.vocab.map(v => `
+                <div class="p-3 bg-indigo-50/60 rounded-2xl border border-indigo-100 text-xs">
+                  <span class="font-extrabold text-indigo-900 block text-sm mb-0.5">${v.word}</span>
+                  <span class="text-slate-600 leading-snug">${v.detail}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <h4 class="text-sm font-bold text-purple-900 uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-book text-purple-600"></i> Key Grammar Rules
+            </h4>
+            <div class="space-y-2">
+              ${data.grammar.map(g => `
+                <div class="p-3.5 bg-purple-50/60 rounded-2xl border border-purple-100 text-xs space-y-1">
+                  <span class="font-extrabold text-purple-900 block text-sm">${g.rule}</span>
+                  <p class="text-slate-700 leading-relaxed">${g.explanation}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start space-x-3 text-amber-900 text-xs">
+          <i class="fa-solid fa-lightbulb text-amber-500 text-xl mt-0.5"></i>
+          <div>
+            <h5 class="font-bold text-sm text-amber-950 mb-0.5">Teacher Exam Tip for ${modKey}</h5>
+            <p class="leading-relaxed">${data.tips}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function jumpToModulePractice(modKey) {
+      window.appState.activeModule = modKey;
+      switchTab('practice');
+      renderModuleRibbon();
+    }
+
+    function handleAuthButtonClick() {
+      if (window.appState.isTeacher) {
+        window.appState.isTeacher = false;
+        document.getElementById('auth-label').innerText = 'Teacher Sign In';
+        document.getElementById('auth-icon').className = 'fa-solid fa-lock text-amber-400';
+        document.getElementById('teacher-status-banner').classList.add('hidden');
+        refreshAppView();
+        alert('Signed out of Teacher Mode.');
+      } else {
+        document.getElementById('modal-teacher-auth').classList.remove('hidden');
+      }
+    }
+
+    function closeAuthModal() {
+      document.getElementById('modal-teacher-auth').classList.add('hidden');
+    }
+
+    function handleTeacherLoginSubmit(e) {
+      e.preventDefault();
+      const pin = document.getElementById('teacher-pin-input').value.trim();
+      const errBox = document.getElementById('auth-error-alert');
+
+      if (pin === window.appState.teacherPasscode || pin === 'bunnyzasya') {
+        window.appState.isTeacher = true;
+        document.getElementById('auth-label').innerText = 'Sign Out Teacher Mode';
+        document.getElementById('auth-icon').className = 'fa-solid fa-unlock text-emerald-400';
+        document.getElementById('teacher-status-banner').classList.remove('hidden');
+        closeAuthModal();
+        refreshAppView();
+        playSoundEffect('correct');
+      } else {
+        errBox.classList.remove('hidden');
+        errBox.innerText = 'Incorrect Teacher Passcode! Access denied.';
+        playSoundEffect('wrong');
+      }
+    }
+
+    function openQuestionModal(editQObj = null) {
+      if (!window.appState.isTeacher) {
+        handleAuthButtonClick();
+        return;
+      }
+
+      const modal = document.getElementById('modal-question-editor');
+      const title = document.getElementById('editor-modal-title');
+
+      if (editQObj) {
+        title.innerText = 'Edit KSSR Question';
+        document.getElementById('edit-q-id').value = editQObj.id;
+        document.getElementById('editor-q-module').value = editQObj.module;
+        document.getElementById('editor-q-skill').value = editQObj.skill;
+        document.getElementById('editor-q-text').value = editQObj.question;
+        document.getElementById('editor-opt-a').value = editQObj.options?.[0] || '';
+        document.getElementById('editor-opt-b').value = editQObj.options?.[1] || '';
+        document.getElementById('editor-opt-c').value = editQObj.options?.[2] || '';
+        document.getElementById('editor-opt-d').value = editQObj.options?.[3] || '';
+        document.getElementById('editor-q-correct').value = editQObj.correct;
+        document.getElementById('editor-q-audio').value = editQObj.audioPrompt || '';
+        document.getElementById('editor-q-explanation').value = editQObj.explanation || '';
+      } else {
+        title.innerText = 'Add New Question';
+        document.getElementById('form-question-editor').reset();
+        document.getElementById('edit-q-id').value = 'q_' + Date.now();
+        document.getElementById('editor-q-module').value = window.appState.activeModule;
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeQuestionModal() {
+      document.getElementById('modal-question-editor').classList.add('hidden');
+    }
+
+    function editActiveQuestion() {
+      const qList = window.appState.filteredQuestions;
+      if (!qList.length) return;
+      openQuestionModal(qList[window.appState.currentQIndex]);
+    }
+
+    function saveQuestionSubmit(e) {
+      e.preventDefault();
+      
+      const qId = document.getElementById('edit-q-id').value || ('q_' + Date.now());
+      const mod = document.getElementById('editor-q-module').value;
+      const skill = document.getElementById('editor-q-skill').value;
+      const qText = document.getElementById('editor-q-text').value;
+
+      const optA = document.getElementById('editor-opt-a').value.trim();
+      const optB = document.getElementById('editor-opt-b').value.trim();
+      const optC = document.getElementById('editor-opt-c').value.trim();
+      const optD = document.getElementById('editor-opt-d').value.trim();
+
+      const options = [optA, optB, optC, optD].filter(o => o.length > 0);
+      const correct = document.getElementById('editor-q-correct').value.trim();
+      const audioPrompt = document.getElementById('editor-q-audio').value.trim();
+      const explanation = document.getElementById('editor-q-explanation').value.trim();
+
+      const newQ = {
+        id: qId,
+        module: mod,
+        skill: skill,
+        question: qText,
+        options: options,
+        correct: correct,
+        audioPrompt: audioPrompt,
+        explanation: explanation
+      };
+
+      if (window.saveQuestionToFirestore) {
+        window.saveQuestionToFirestore(newQ);
+      }
+
+      closeQuestionModal();
+      playSoundEffect('correct');
+      alert("Question saved successfully!");
+    }
+
+    function renderCMSTable() {
+      const tbody = document.getElementById('cms-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const search = document.getElementById('cms-search-input').value.toLowerCase();
+      const modFilter = document.getElementById('cms-module-filter').value;
+      const skillFilter = document.getElementById('cms-skill-filter').value;
+
+      let list = window.appState.questions;
+
+      if (modFilter !== 'All') {
+        list = list.filter(q => q.module === modFilter);
+      }
+      if (skillFilter !== 'All') {
+        list = list.filter(q => q.skill === skillFilter);
+      }
+      if (search) {
+        list = list.filter(q => q.question.toLowerCase().includes(search) || q.correct.toLowerCase().includes(search));
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-medium">No matching questions found in dataset.</td></tr>`;
+        return;
+      }
+
+      list.forEach(q => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+        tr.innerHTML = `
+          <td class="p-3.5 font-bold text-indigo-600">${q.module}</td>
+          <td class="p-3.5"><span class="bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full font-bold text-[10px]">${q.skill}</span></td>
+          <td class="p-3.5 font-medium max-w-xs truncate" title="${q.question}">${q.question}</td>
+          <td class="p-3.5 font-bold text-emerald-600">${q.correct}</td>
+          <td class="p-3.5 text-center space-x-1">
+            <button onclick="triggerEditQuestion('${q.id}')" class="p-1.5 bg-amber-100 text-amber-800 hover:bg-amber-200 rounded-lg transition" title="Edit Question">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button onclick="triggerDeleteQuestion('${q.id}')" class="p-1.5 bg-rose-100 text-rose-800 hover:bg-rose-200 rounded-lg transition" title="Delete Question">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function triggerEditQuestion(id) {
+      const q = window.appState.questions.find(x => x.id === id);
+      if (q) openQuestionModal(q);
+    }
+
+    function triggerDeleteQuestion(id) {
+      if (!confirm("Are you sure you want to delete this question?")) return;
+      if (window.deleteQuestionFromFirestore) {
+        window.deleteQuestionFromFirestore(id);
+      }
+      renderCMSTable();
+    }
+
+    function exportQuestionsJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.appState.questions, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `kssr_year3_english_questions_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    let examTimerInterval = null;
+    let examQuestions = [];
+    let examIndex = 0;
+    let examScore = 0;
+
+    function startMockExam() {
+      playSoundEffect('click');
+      document.getElementById('exam-active-panel').classList.remove('hidden');
+
+      examQuestions = [...window.appState.questions].sort(() => Math.random() - 0.5).slice(0, 20);
+      examIndex = 0;
+      examScore = 0;
+
+      let secondsLeft = 15 * 60;
+      clearInterval(examTimerInterval);
+
+      examTimerInterval = setInterval(() => {
+        secondsLeft--;
+        const mins = Math.floor(secondsLeft / 60);
+        const secs = secondsLeft % 60;
+        document.getElementById('exam-timer-display').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        if (secondsLeft <= 0) {
+          clearInterval(examTimerInterval);
+          finishMockExam();
+        }
+      }, 1000);
+
+      renderExamQuestion();
+    }
+
+    function renderExamQuestion() {
+      if (examIndex >= examQuestions.length) {
+        finishMockExam();
+        return;
+      }
+
+      document.getElementById('exam-progress-text').innerText = `Question ${examIndex + 1} / ${examQuestions.length}`;
+      const q = examQuestions[examIndex];
+      const body = document.getElementById('exam-question-body');
+
+      body.innerHTML = `
+        <div class="space-y-4">
+          <div class="flex items-center space-x-2 text-xs font-bold text-slate-500">
+            <span class="bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">${q.module}</span>
+            <span class="bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full">${q.skill}</span>
+          </div>
+          <h3 class="text-base font-bold text-slate-900">${q.question}</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+            ${(q.options || []).map(opt => `
+              <button onclick="selectExamOption('${opt.replace(/'/g, "\\'")}', '${q.correct.replace(/'/g, "\\'")}')" class="p-3 text-left border border-slate-200 rounded-xl hover:bg-indigo-50 hover:border-indigo-300 font-medium text-xs transition">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function selectExamOption(selected, correct) {
+      if (selected.trim().toLowerCase() === correct.trim().toLowerCase()) {
+        examScore++;
+        playSoundEffect('correct');
+      } else {
+        playSoundEffect('wrong');
+      }
+
+      examIndex++;
+      renderExamQuestion();
+    }
+
+    function submitExamEarly() {
+      if (confirm("Are you sure you want to finish and submit the exam now?")) {
+        finishMockExam();
+      }
+    }
+
+    function finishMockExam() {
+      clearInterval(examTimerInterval);
+      const body = document.getElementById('exam-question-body');
+      const pct = Math.round((examScore / (examQuestions.length || 1)) * 100);
+
+      body.innerHTML = `
+        <div class="text-center py-8 space-y-4">
+          <div class="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-3xl">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <h3 class="text-2xl font-bold heading-font text-slate-900">Exam Complete!</h3>
+          <p class="text-slate-600 text-sm">You scored <span class="text-indigo-600 font-extrabold text-lg">${examScore} / ${examQuestions.length}</span> (${pct}%)</p>
+          <div class="pt-2">
+            <button onclick="openCertificateModal()" class="bg-indigo-600 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow transition">
+              📜 Generate Revision Certificate
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function openCertificateModal() {
+      document.getElementById('modal-certificate').classList.remove('hidden');
+      drawCertificate();
+    }
+
+    function closeCertificateModal() {
+      document.getElementById('modal-certificate').classList.add('hidden');
+    }
+
+    function drawCertificate() {
+      const canvas = document.getElementById('cert-canvas');
+      const ctx = canvas.getContext('2d');
+      const studentName = document.getElementById('student-cert-name').value || 'Smart Student';
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 12;
+      ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 24px Fredoka, sans-serif';
+      ctx.fillText('CERTIFICATE OF ACHIEVEMENT', canvas.width / 2, 70);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '14px Inter, sans-serif';
+      ctx.fillText('KSSR Year 3 Get Smart Plus 3 English Revision', canvas.width / 2, 95);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText('This certificate is proudly awarded to:', canvas.width / 2, 140);
+
+      ctx.fillStyle = '#1d4ed8';
+      ctx.font = 'bold 28px Fredoka, sans-serif';
+      ctx.fillText(studentName, canvas.width / 2, 185);
+
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2 - 120, 195);
+      ctx.lineTo(canvas.width / 2 + 120, 195);
+      ctx.strokeStyle = '#93c5fd';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#334155';
+      ctx.font = '13px Inter, sans-serif';
+      ctx.fillText('For outstanding mastery across all 10 Modules in Grammar, Vocabulary,', canvas.width / 2, 230);
+      ctx.fillText('Reading, Listening, Speaking, and Writing Skills.', canvas.width / 2, 250);
+
+      const dateStr = new Date().toLocaleDateString('en-MY', { year: 'numeric', month: 'short', day: 'numeric' });
+      ctx.fillStyle = '#64748b';
+      ctx.font = '11px Inter, sans-serif';
+      ctx.fillText(`Date: ${dateStr}`, 100, 330);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillText('KSSR Teacher Stamp', canvas.width - 120, 330);
+
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, 325, 25, 0, Math.PI * 2);
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.fillText('★', canvas.width / 2, 331);
+    }
+
+    function downloadCertificate() {
+      const canvas = document.getElementById('cert-canvas');
+      const img = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = `KSSR_Year3_English_Certificate.png`;
+      link.href = img;
+      link.click();
+    }
+  </script>
+
+</body>
+</html>
